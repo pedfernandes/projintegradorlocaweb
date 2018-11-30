@@ -1,0 +1,26 @@
+﻿@{
+    string modelo = Request.QueryString["model"];
+    var veiculo = new VeiculoDAO().Buscar(modelo);
+
+    Locacao locacao;
+
+    if (Session["locacao"] == null)
+    {
+        locacao = new Locacao();
+        locacao.DataInicio = DateTime.Now;
+    }
+    else
+    {
+        locacao = (Locacao)Session["locacao"];
+    }
+
+    Item item = new Item(locacao);
+    item.ObjVeiculo = veiculo;
+
+    locacao.ListaItem.Add(item);
+
+    Session["locacao"] = locacao;
+
+
+    Response.Write(Json.Encode(veiculo));
+}

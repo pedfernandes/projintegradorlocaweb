@@ -1,0 +1,221 @@
+﻿@{
+    Page.Title = "Cadastro do cliente ";
+    Layout = "~/View/Shared/_Layout.cshtml";
+
+    if (IsPost)
+    {
+        Cliente objCliente = new Cliente();
+        objCliente.Nome = Request.Form["txtNome"];
+        objCliente.Telefone = Request.Form["txtMatricula"];
+        objCliente.Cpf = Request.Form["txtCPF"];
+        objCliente.Email = Request.Form["txtEmail"];
+        objCliente.Endereco = Request.Form["txtEndereco"];
+
+
+
+
+
+
+        bool sucesso = new ClienteBO().Gravar(objCliente);
+
+
+        if (sucesso)
+        {
+            Page.msgSucesso = "Reserva realizada com sucesso, aguarde o contato da nossa Equipe. Obrigado";
+        }
+        else
+        {
+            Page.msgErro = "Erro ao confirmar reserva";
+        }
+    }
+
+
+
+    IList<Veiculo> listaVeiculos = new VeiculoBO().ListaVeiculos();
+
+    if (IsPost)
+    {
+        Locacao locacao = (Locacao)Session["locacao"];
+
+        if (locacao.ListaItem.Count > 0)
+        {
+            var locacaoGravado = new LocacaoDAO().Gravar(locacao);
+
+            var itemGravado = new ItemDAO().Gravar(locacaoGravado);
+
+        }
+
+    }
+
+
+}
+<div class="row">
+    <div class="col-12">
+        @if (Page.msgSucesso != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @Page.msgSucesso
+            </div>
+        }
+
+        @if (Page.msgErro != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @Page.msgErro
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>CONFIRME O VEÌCULO</h2>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Informe o Veiculo:</h5>
+                <form method="post" action="" id="frmBusca">
+                    <div class="row">
+                        <div class="col-4"><label>Buscar Veiculo</label></div>
+                        <div class="col-4">
+                            <input type="text" name="txtBuscaVeiculo" id="txtBuscaVeiculo" class="form-control" />
+                        </div>
+                        <div class="col-2">
+                            <a href="#" class="btn btn-primary" onclick="addVeiculo()">Incluir Veiculo</a>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Descricao</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemTbody"></tbody>
+                    </table>
+                    <input type="submit" class="btn btn-success" id="btnGravarLocacao" value="Confirmar Veiculo" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+      <!--  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="img-fluid" src="~/Img/vehicle1.jpg" alt="Golf">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="~/Img/vehicle2.jpg" alt="Audi A1">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="~/Img/vehicle3.jpg" alt="Corolla">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+
+    </div>
+</div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <label>Confirmar o veiculo:</label>
+            <input type="text" name="txtData" id="txtNome" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Data início (Locação):</label>
+            <input type="date" name="txtdataInicio" id="txtCPF" class="form-control" />
+        </div>
+        <div class="col-6">
+            <label>Data Entrega (Locação):</label>
+            <input type="date" name="txtdataEntrega" id="txtEmail" class="form-control" />
+        </div>
+    </div> -->
+
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>DADOS PESSOAIS</h2>
+            </div>
+
+            <form method="post" action="">
+
+                <div class="row">
+                    <div class="col-12">
+                        <label>Nome:</label>
+                        <input type="text" name="txtNome" id="txtNome" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label>CPF:</label>
+                        <input type="text" name="txtCPF" id="txtCPF" class="form-control" />
+                    </div>
+                    <div class="col-6">
+                        <label>E-mail:</label>
+                        <input type="email" name="txtEmail" id="txtEmail" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <label>Endereço:</label>
+                        <input type="text" name="txtEndereco" id="txtEndereco" class="form-control" />
+                    </div>
+                    <div class="col-4">
+                        <label>Telefone:</label>
+                        <input type="text" name="txtTelefone" id="txtTelefone" class="form-control" />
+                    </div>
+                </div><br />
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" name="btnGravar" value="Confirmar Reserva" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        function addVeiculo() {
+            var xhttp = new XMLHttpRequest();
+            var model = document.getElementById('txtBuscaVeiculo').value;
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var veiculo = JSON.parse(xhttp.responseText);
+                    var tbody = document.getElementById("itemTbody");
+                    tbody.innerHTML += "<tr> <td>" + veiculo.VeiculotoID + "</td> <td>" + veiculo.Modelo + "</td></tr>";
+                }
+            };
+            xhttp.open("GET", "AddItemLocacaoAJAX.cshtml?nom=" + model, true);
+            xhttp.send();
+        }
+
+
+    </script>
